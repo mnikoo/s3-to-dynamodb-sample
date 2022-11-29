@@ -5,9 +5,7 @@ THIS SOLUTION IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
 
 # Why?
-To import data from Amazon S3 to Amazon DynamoDB, you can use the DynamoDB data import feature [[announcement](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataImport.HowItWorks.html)] [[blog post](https://aws.amazon.com/blogs/database/amazon-dynamodb-can-now-import-amazon-s3-data-into-a-new-table/)] .
-
-At the time of this writing, the import function does not support importing to an existing DynamoDB table, so a custom solution is needed.
+To import data from Amazon S3 to Amazon DynamoDB, you can use the DynamoDB data import feature [[announcement](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataImport.HowItWorks.html)] [[blog post](https://aws.amazon.com/blogs/database/amazon-dynamodb-can-now-import-amazon-s3-data-into-a-new-table/)]. At the time of this writing, the import function does not support importing to an existing DynamoDB table, so a custom solution is needed.
 
 # What?
 
