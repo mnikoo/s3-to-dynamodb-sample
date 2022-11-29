@@ -16,6 +16,9 @@ resource "aws_glue_job" "import_job" {
     "--job-language"          = "python"
     "--DYNAMODB_TABLE_NAME"   = aws_dynamodb_table.target.name
     "--INPUT_BUCKET_NAME"     = aws_s3_bucket.input.bucket
+    "--continuous-log-logGroup" = "${var.project_name_prefix}log-group"
+    "--enable-continuous-cloudwatch-log" = true
+
   }
 
   execution_property {
@@ -46,6 +49,12 @@ resource "aws_iam_role" "data_import_job" {
   }
 }
 
+locals {
+  cloud_watch_arn1 = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:${var.project_name_prefix}log-group:*"
+  cloud_watch_arn2 = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws-glue/jobs/output:*"
+  cloud_watch_arn3 = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws-glue/jobs/error:*"
+}
+
 data "aws_iam_policy_document" "glue_job_permissions" {
   statement {
     sid       = "AllowS3GetObject"
@@ -62,13 +71,13 @@ data "aws_iam_policy_document" "glue_job_permissions" {
   statement {
     sid       = "AllowCloudWatchCreateLogGroup"
     effect    = "Allow"
-    resources = ["*"]
+    resources = [local.cloud_watch_arn1, local.cloud_watch_arn2, local.cloud_watch_arn3]
     actions   = ["logs:CreateLogGroup"]
   }
   statement {
     sid       = "AllowCloudWatchWriteLogs"
     effect    = "Allow"
-    resources = ["*"]
+    resources = [local.cloud_watch_arn1, local.cloud_watch_arn2, local.cloud_watch_arn3]
     actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
   }
 }
